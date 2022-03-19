@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entitati>
+    <tema ID="1">
+        <Descriere>Mobile</Descriere>
+        <Deadline>9</Deadline>
+        <Startline>8</Startline>
+    </tema>
+    <tema ID="2">
+        <Descriere>PDP</Descriere>
+        <Deadline>12</Deadline>
+        <Startline>8</Startline>
+    </tema>
+</Entitati>

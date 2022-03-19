@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<NoteStudent>
+    <nota>
+        <Tema>1</Tema>
+        <Nota>10.0</Nota>
+        <SaptamanaPredare>10</SaptamanaPredare>
+        <Deadline>9</Deadline>
+        <Feedback>GOOD</Feedback>
+    </nota>
+    <nota>
+        <Tema>2</Tema>
+        <Nota>10.0</Nota>
+        <SaptamanaPredare>10</SaptamanaPredare>
+        <Deadline>12</Deadline>
+        <Feedback>VeryGood</Feedback>
+    </nota>
+</NoteStudent>
