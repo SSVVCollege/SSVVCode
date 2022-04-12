@@ -24,7 +24,7 @@ public class ServiceTest {
     private static final String STUDENT_FILE = "files/test/studenti.xml";
     private static final String ASSIGNMENT_FILE = "files/test/teme.xml";
 
-    private static final Map<String, String> INVALID_MESSAGES = new HashMap<String, String>();
+    private static final Map<String, String> INVALID_MESSAGES = new HashMap<>();
 
     private static Service serviceStudent;
     private static Service serviceAssignment;
@@ -33,6 +33,11 @@ public class ServiceTest {
         ServiceTest.INVALID_MESSAGES.put("id", "ID invalid");
         ServiceTest.INVALID_MESSAGES.put("name", "Nume invalid");
         ServiceTest.INVALID_MESSAGES.put("group", "Grupa invalida");
+        ServiceTest.INVALID_MESSAGES.put("description", "Descriere invalida");
+        ServiceTest.INVALID_MESSAGES.put("deadline", "Deadline invalid");
+        ServiceTest.INVALID_MESSAGES.put("startline", "Data de primire invalida");
+        ServiceTest.INVALID_MESSAGES.put("interval", "Interval startline-deadline invalid");
+        ServiceTest.INVALID_MESSAGES.put("duplicateAssignment", "Entity of type Tema already exists");
     }
 
     public static void setUpStudent() {
@@ -99,6 +104,7 @@ public class ServiceTest {
         Assertions.assertTrue(vex3.getMessage().contains(ServiceTest.INVALID_MESSAGES.get("group")));
         Assertions.assertTrue(vex4.getMessage().contains(ServiceTest.INVALID_MESSAGES.get("group")));
         Assertions.assertTrue(vex4.getMessage().contains(ServiceTest.INVALID_MESSAGES.get("group")));
+        Assertions.assertTrue(vex5.getMessage().contains(ServiceTest.INVALID_MESSAGES.get("group")));
     }
 
     @Test
@@ -124,60 +130,100 @@ public class ServiceTest {
         Assertions.assertEquals(4, StreamSupport.stream(ServiceTest.serviceStudent.findAllStudents().spliterator(), false).count());
     }
 
+
     @Test
     public void AssignmentNullIdException() {
-        Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema(null, "descr", 4, 3));
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema(null, "descr", 4, 3));
+
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("id")));
     }
 
     @Test
     public void AssignmentEmptyIdException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("", "descr", 4, 3));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("id")));
     }
 
     @Test
     public void AssignmentNullDescriptionException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", null, 4, 3));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("description")));
     }
 
     @Test
     public void AssignmentEmptyDescriptionException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "", 4, 3));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("description")));
     }
 
     @Test
     public void AssignmentNullDeadlineException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "descr", null, 3));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("deadline")));
     }
 
     @Test
     public void AssignmentLowerBoundDeadlineException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "descr", 0, 3));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("deadline")));
     }
 
     @Test
     public void AssignmentUpperBoundDeadlineException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "descr", 16, 3));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("deadline")));
     }
 
     @Test
     public void AssignmentNullStartlineException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "descr", 4, null));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("startline")));
     }
 
 
     @Test
     public void AssignmentLowerBoundStartlineException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "descr", 4, 0));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("startline")));
     }
 
     @Test
     public void AssignmentUpperBoundStartlineException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "descr", 4, 16));
 
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("startline")));
     }
 
     @Test
-    public void AssignmentIntervalExcception() {
+    public void AssignmentIntervalException() {
+        Exception exception = Assertions.assertThrows(ValidationException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "descr", 2, 4));
+        
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("interval")));
+    }
 
+    @Test
+    public void AssignmentSaveValidNoException() {
+        ServiceTest.serviceAssignment.saveTema("1", "descr1", 4, 2);
+        ServiceTest.serviceAssignment.saveTema("2", "descr2", 4, 2);
+        ServiceTest.serviceAssignment.saveTema("3", "descr3", 4, 2);
+        ServiceTest.serviceAssignment.saveTema("4", "descr4", 4, 2);
+
+        Assertions.assertEquals(4, StreamSupport.stream(ServiceTest.serviceAssignment.findAllTeme().spliterator(), false).count());
+    }
+
+    @Test
+    public void AssignmentSaveValidDuplicateId() {
+        Exception exception = Assertions.assertThrows(EntityAlreadyExistsException.class, () -> ServiceTest.serviceAssignment.saveTema("1", "descr", 4, 2));
+
+        Assertions.assertTrue(exception.getMessage().contains(INVALID_MESSAGES.get("duplicateAssignment")));
     }
 
 }

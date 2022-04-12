@@ -19,7 +19,7 @@ public class TemaValidator implements Validator<Tema> {
             throw new ValidationException("Data de primire invalida! \n");
 
         if (tema.getStartline() > tema.getDeadline())
-            throw new ValidationException("Interval startline - deadline invalid! \n");
+            throw new ValidationException("Interval startline-deadline invalid! \n");
     }
 }
 
