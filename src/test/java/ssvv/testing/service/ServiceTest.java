@@ -211,6 +211,7 @@ public class ServiceTest {
 
     @Test
     public void AssignmentSaveValidNoException() {
+
         ServiceTest.serviceAssignment.saveTema("1", "descr1", 4, 2);
         ServiceTest.serviceAssignment.saveTema("2", "descr2", 4, 2);
         ServiceTest.serviceAssignment.saveTema("3", "descr3", 4, 2);
