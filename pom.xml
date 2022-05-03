@@ -2,24 +2,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-	
-	<groupId>ssvv</groupId>
+
+    <groupId>ssvv</groupId>
     <artifactId>testing</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>testing</name>
     <description>Student Management system used for testing</description>
-	
-	<properties>
-		<!--system-->
+
+    <properties>
+        <!--system-->
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-		
-		<!--dependencies-->
+
+        <!--dependencies-->
         <org.projectlombok.version>1.18.16</org.projectlombok.version>
-		<log4j.version>2.17.1</log4j.version>
-		<junit.jupiter.version>5.8.1</junit.jupiter.version>
+        <log4j.version>2.17.1</log4j.version>
+        <junit.jupiter.version>5.8.1</junit.jupiter.version>
         <junit.platform.version>1.8.1</junit.platform.version>
+        <mockito.version>3.3.3</mockito.version>
     </properties>
 
     <dependencies>
@@ -50,9 +51,9 @@
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
         </dependency>
-		
-		<!--For tests-->
-		<dependency>
+
+        <!--For tests-->
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
@@ -71,35 +72,37 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-suite</artifactId>
-            <version>${junit.platform.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.starnowski.bmunit.extension</groupId>
             <artifactId>junit4-rule</artifactId>
             <version>1.1.1</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- For mocking/stubbing -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
-        <plugins>	
-			<!--for unit tests-->
+        <plugins>
+            <!--for unit tests-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
                     <argLine>--illegal-access=permit</argLine>
-					<includes>
+                    <includes>
                         <include>**/*Test.java</include>
                     </includes>
                 </configuration>
             </plugin>
 
-			<!--for integration tests-->
+            <!--for integration tests-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -119,9 +122,9 @@
                     </execution>
                 </executions>
             </plugin>
-			
-			<!--processor for code generation-->
-			<plugin>
+
+            <!--processor for code generation-->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
